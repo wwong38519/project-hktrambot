@@ -1,2 +1,2 @@
-telebot==8.3
+telepot==8.3
 geopy==1.11.0
