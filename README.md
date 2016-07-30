@@ -4,6 +4,7 @@
 
 * The project is a simple Telegram Bot which can retrieve the nearest tram stop and the estimated arrival time of next trams
 * It is written in Python with the use of the Telegram Bot Framework Telepot and Geopy for the distance calculation
+* The bot can be found at http://telegram.me/hktrambot
 
 #### Heroku
 
