@@ -13,12 +13,12 @@ ENDPOINT_ETA = os.environ.get('ENDPOINT_ETA', '')
 TIMEOUT_SEC = 30
 
 msgKeyboardStart = '/start'
-msgKeyboardCancel = '/cancel'
+msgKeyboardCancel = 'Main Menu'
 msgKeyboardFindStop = 'Find my nearest stop'
 msgKeyboardShowEta = 'Show estimated arrival time'
 msgKeyboardDirectionEast = 'East'
 msgKeyboardDirectionWest = 'West'
-msgReady = 'Please send '+msgKeyboardStart+' to start.'
+msgReady = 'Please '+msgKeyboardStart+' over.'
 msgDirection = 'Please choose your direction.'
 msgLocation = 'Please send me your location.'
 
@@ -58,7 +58,6 @@ keyboardReady = ReplyKeyboardMarkup(keyboard=[
 
 keyboardDirection = ReplyKeyboardMarkup(keyboard=[
 	[KeyboardButton(text=msgKeyboardDirectionWest), KeyboardButton(text=msgKeyboardDirectionEast)],
-	[KeyboardButton(text=msgKeyboardCancel)],
 ], resize_keyboard=True)
 
 keyboardLocation = ReplyKeyboardMarkup(keyboard=[
@@ -68,7 +67,6 @@ keyboardLocation = ReplyKeyboardMarkup(keyboard=[
 
 keyboardEta = ReplyKeyboardMarkup(keyboard=[
 	[KeyboardButton(text=msgKeyboardShowEta)],
-	[KeyboardButton(text=msgKeyboardStart)],
 	[KeyboardButton(text=msgKeyboardCancel)],
 ], resize_keyboard=True)
 
@@ -82,7 +80,7 @@ class MessageBot(telepot.helper.ChatHandler):
 	def on_message(self, msg):
 		text = msg.get('text', None)
 		location = msg.get('location', None)
-		print 'Incoming Message :', text, location
+		print 'Incoming Message :', text, 'Location :', location
 		if text is not None:
 			if text == msgKeyboardStart:
 				self.open(msg, None)
@@ -90,7 +88,9 @@ class MessageBot(telepot.helper.ChatHandler):
 				keyboard = keyboardDirection
 				self.sender.sendMessage(replyMsg, reply_markup=keyboard)
 			elif text == msgKeyboardCancel:
-				self.on_close(None)
+				replyMsg = msgDirection
+				keyboard = keyboardDirection
+				self.sender.sendMessage(replyMsg, reply_markup=keyboard)
 			elif text == msgKeyboardDirectionEast:
 				self._direction = 'EB'
 				replyMsg = msgLocation
@@ -119,7 +119,7 @@ class MessageBot(telepot.helper.ChatHandler):
 			self.reset()
 			replyMsg = msgReady
 			keyboard = keyboardReady
-			self.sender.sendMessage(replyMsg, reply_markup=keyboard)
+			self.sender.sendMessage(replyMsg, disable_notification=True, reply_markup=keyboard)
 	def reset(self):
 		self._direction = None
 		self._stop = None
