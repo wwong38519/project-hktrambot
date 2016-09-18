@@ -1,11 +1,15 @@
-FROM resin/raspberrypi-python:2.7
+FROM ioft/armhf-ubuntu:latest
 
-WORKDIR /usr/src/app
+RUN apt-get update && apt-get upgrade -y
+
+RUN apt-get install -y python-pip python-dev build-essential 
 
 COPY requirements.txt /usr/src/app/
 
+WORKDIR /usr/src/app
+
 RUN pip install -r requirements.txt
 
-ENTRYPOINT ["python", "app.py"]
-
 COPY . /usr/src/app
+
+CMD ["python", "app.py"]
